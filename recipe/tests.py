@@ -1,53 +1,104 @@
+from django.http import HttpRequest
 from django.test import Client, TestCase
 
 from recipe.models import Ingredient
+from recipe.views import get, save
 
 
 class IngredientsRecipeTests(TestCase):
     @classmethod
-    def setUpTestData(cls):
+    def setUpTestData(cls):  # Arrange
         cls.first_ingredient = Ingredient.objects.create_ingredient("oil", 10, "cl")
+        cls.second_ingredient = Ingredient.objects.create_ingredient(
+            "salad", 1, "piece"
+        )
 
-    def test_all_ingredient_are_retrieved(self):
+    def test_all_ingredients_are_retrieved(self):
         """Retrieve all ingredients."""
-        ingredients = Ingredient.objects.all()
-        self.assertEqual(1, ingredients[0].id)
-        self.assertEqual(self.first_ingredient.ingredient, ingredients[0].ingredient)
-        self.assertEqual(self.first_ingredient.quantity, ingredients[0].quantity)
-        self.assertEqual(self.first_ingredient.unit, ingredients[0].unit)
+        context = get()  # Act
+        self.assertEqual(2, len(context["ingredients"]))  # Assert
+        self.assertEqual(self.first_ingredient, context["ingredients"][0])  # Assert
+        self.assertEqual(self.second_ingredient, context["ingredients"][1])  # Assert
 
-    def test_add_an_ingredient(self):
-        """Add an ingredient."""
-        ingredients = Ingredient.objects.all()
-        self.assertEqual(1, len(ingredients))
-        ingredient = Ingredient.objects.create_ingredient("onion", 1, "piece")
-        ingredient.save()
-        ingredients = Ingredient.objects.all()
-        self.assertEqual(2, len(ingredients))
-        self.assertEqual(ingredient.ingredient, ingredients[1].ingredient)
-        self.assertEqual(ingredient.quantity, ingredients[1].quantity)
-        self.assertEqual(ingredient.unit, ingredients[1].unit)
+    def test_add_a_valid_ingredient(self):
+        """Add a valid ingredient."""
+        request = HttpRequest()  # Arrange
+        request.method = "POST"  # Arrange
+        request.POST.appendlist("plus", "plus")  # Arrange
+        request.POST.appendlist("name", "onion")  # Arrange
+        request.POST.appendlist("quantity", "1")  # Arrange
+        request.POST.appendlist("metric", "piece")  # Arrange
+        context = save(request)  # Act
+        self.assertEqual(3, len(context["ingredients"]))  # Assert
+        self.assertEqual(3, context["ingredients"][2].id)  # Assert
+        self.assertEqual("onion", context["ingredients"][2].ingredient)  # Assert
+        self.assertEqual(1, context["ingredients"][2].quantity)  # Assert
+        self.assertEqual("piece", context["ingredients"][2].unit)  # Assert
+
+    def test_add_an_invalid_ingredient(self):
+        """Add an invalid ingredient."""
+        request = HttpRequest()  # Arrange
+        request.method = "POST"  # Arrange
+        request.POST.appendlist("plus", "plus")  # Arrange
+        request.POST.appendlist("name", "onion1")  # Arrange
+        request.POST.appendlist("quantity", "1")  # Arrange
+        request.POST.appendlist("metric", "piece")  # Arrange
+        context = save(request)  # Act
+        self.assertEqual(2, len(context["ingredients"]))  # Assert
+        self.assertIn("Name is a word.", context["form"].errors.as_json())  # Assert
 
     def test_get_all_ingredients_to_view(self):
         """Get all ingredients in DOM."""
-        client = Client()
-        response = client.get("/recipe/")
-        ingredients = response.context["ingredients"]
-        self.assertQuerysetEqual(ingredients, [self.first_ingredient])
+        client = Client()  # Arrange
+        response = client.get("/recipe/")  # Act
+        self.assertEqual(2, len(response.context["ingredients"]))  # Assert
+        self.assertQuerysetEqual(
+            response.context["ingredients"],
+            [self.first_ingredient, self.second_ingredient],
+            ordered=False,
+        )  # Assert
 
-    def test_add_an_ingredient_to_view(self):
-        """Add an ingredient in DOM."""
-        client = Client()
+    def test_add_a_valid_ingredient_to_view(self):
+        """Add a valid ingredient in DOM."""
+        client = Client()  # Arrange
+        new_ingredient = {
+            "plus": "plus",
+            "name": "onion",
+            "quantity": "1",
+            "metric": "piece",
+        }  # Arrange
         response = client.post(
             "/recipe/",
-            {"plus": "plus", "name": "onion", "quantity": 1, "metric": "piece"},
-        )
-        form = response.context["form"]
-        ingredients = response.context["ingredients"]
-        self.assertEqual(2, len(ingredients))
-        self.assertEqual("onion", form["name"].value())
-        self.assertEqual("1", form["quantity"].value())
-        self.assertEqual("piece", form["metric"].value())
-        self.assertEqual("onion", ingredients[1].ingredient)
-        self.assertEqual(1, ingredients[1].quantity)
-        self.assertEqual("piece", ingredients[1].unit)
+            new_ingredient,
+        )  # Act
+        self.assertEqual(3, len(response.context["ingredients"]))  # Assert
+        self.assertEqual(
+            new_ingredient["name"], response.context["form"]["name"].value()
+        )  # Assert
+        self.assertEqual(
+            new_ingredient["quantity"], response.context["form"]["quantity"].value()
+        )  # Assert
+        self.assertEqual(
+            new_ingredient["metric"], response.context["form"]["metric"].value()
+        )  # Assert
+        self.assertEqual(
+            new_ingredient["name"], response.context["ingredients"][2].ingredient
+        )  # Assert
+        self.assertEqual(
+            new_ingredient["quantity"], str(response.context["ingredients"][2].quantity)
+        )  # Assert
+        self.assertEqual(
+            new_ingredient["metric"], response.context["ingredients"][2].unit
+        )  # Assert
+
+    def test_add_an_invalid_ingredient_to_view(self):
+        """Add an invalid ingredient in DOM."""
+        client = Client()  # Arrange
+        response = client.post(
+            "/recipe/",
+            {"plus": "plus", "name": "onion1", "quantity": "1", "metric": "piece"},
+        )  # Act
+        self.assertEqual(2, len(response.context["ingredients"]))  # Assert
+        self.assertIn(
+            "Name is a word.", response.context["form"].errors.as_json()
+        )  # Assert
