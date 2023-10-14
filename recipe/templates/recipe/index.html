@@ -45,7 +45,7 @@
             <section>
                 <h2 class="subtitle">Ingredients</h2>
                 <form method="post" action="{% url 'index' %}" novalidate> {% csrf_token %} <div class="item-handler">
-                        Servings: <button type="button" class="less-item" name="minus" value="minus">-</button>
+                        Servings: <button class="less-item" name="minus" value="minus">-</button>
                         <span>{{ ingredients|length }}</span>
                         <button class="more-item" name="plus" value="plus">+</button>
                     </div>
@@ -80,6 +80,11 @@
                                 <td>{{ ingredient.unit }}</td>
                             </tr> 
                             {% endfor %}
+                            {% if error_message %}
+                            <tr>
+                                <td colspan="4" class="warning">{{ error_message }}</td>
+                            </tr>
+                            {% endif %}
                         </tbody>
                     </table>
                 </form>

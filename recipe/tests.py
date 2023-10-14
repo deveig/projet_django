@@ -2,7 +2,7 @@ from django.http import HttpRequest
 from django.test import Client, TestCase
 
 from recipe.models import Ingredient
-from recipe.views import get, save
+from recipe.views import get, save, delete
 
 
 class IngredientsRecipeTests(TestCase):
@@ -47,6 +47,19 @@ class IngredientsRecipeTests(TestCase):
         self.assertEqual(2, len(context["ingredients"]))  # Assert
         self.assertIn("Name is a word.", context["form"].errors.as_json())  # Assert
 
+    def test_delete_the_last_ingredient(self):
+        """Delete the last ingredient."""
+        context = delete()  # Act
+        self.assertEqual(1, len(context["ingredients"]))  # Assert
+        self.assertEqual(self.first_ingredient, context["ingredients"][0])  # Assert
+
+    def test_delete_when_no_ingredient(self):
+        """Delete when no ingredient."""
+        for i in range(3):
+            context = delete()  # Act
+        self.assertEqual(0, len(context["ingredients"]))  # Assert
+        self.assertEqual("No ingredient to remove.", context["error_message"]) # Assert
+    
     def test_get_all_ingredients_to_view(self):
         """Get all ingredients in DOM."""
         client = Client()  # Arrange
@@ -101,4 +114,30 @@ class IngredientsRecipeTests(TestCase):
         self.assertEqual(2, len(response.context["ingredients"]))  # Assert
         self.assertIn(
             "Name is a word.", response.context["form"].errors.as_json()
+        )  # Assert
+    
+    def test_delete_the_last_ingredient_to_view(self):
+        """Delete the last ingredient in DOM."""
+        client = Client()  # Arrange
+        response = client.post(
+            "/recipe/",
+            {"minus": "minus", "name": "", "quantity": "", "metric": ""},
+        )  # Act
+        self.assertEqual(1, len(response.context["ingredients"]))  # Assert
+        self.assertEqual(
+            self.first_ingredient,
+            response.context["ingredients"][0]
+        )  # Assert
+
+    def test_delete_when_no_ingredient_to_view(self):
+        """Delete when there is no ingredient in DOM."""
+        client = Client()  # Arrange
+        for i in range(3):
+            response = client.post(
+                "/recipe/",
+                {"minus": "minus", "name": "", "quantity": "", "metric": ""},
+            )  # Act
+        self.assertEqual(0, len(response.context["ingredients"]))  # Assert
+        self.assertEqual(
+            "No ingredient to remove.", response.context["error_message"]
         )  # Assert

@@ -12,6 +12,8 @@ def index(request):
             "plus"
         ):  # Check POST request.
             context = save(request)
+        if request.method == "POST" and request.POST.__contains__("minus"):
+            context = delete()
     except Exception as exception:
         raise Http404() from exception
     else:
@@ -21,12 +23,14 @@ def index(request):
 def get():
     ingredients = Ingredient.objects.all()
     form = IngredientForm()
-    return {"ingredients": ingredients, "form": form}
+    error_message = ""
+    return {"ingredients": ingredients, "form": form, "error_message": error_message}
 
 
 def save(request):
     ingredients = Ingredient.objects.all()
     form = IngredientForm(request.POST)
+    error_message = ""
     if form.is_valid():  # Check valid ingredient.
         Ingredient.objects.create_ingredient(
             form.cleaned_data["name"],
@@ -37,9 +41,33 @@ def save(request):
         return {
             "ingredients": ingredients,
             "form": form,
+            "error_message": error_message,
         }
     else:
         return {
             "ingredients": ingredients,
             "form": form,
+            "error_message": error_message,
+        }
+
+def delete():
+    ingredients = Ingredient.objects.all()
+    form = IngredientForm()
+    error_message = ""
+    if len(ingredients) != 0:
+        last_ingredient = ingredients.last()
+        last_ingredient_id = last_ingredient.id
+        Ingredient.objects.filter(id__exact=last_ingredient_id).delete()
+        ingredients = Ingredient.objects.all()
+        return {
+            "ingredients": ingredients,
+            "form": form,
+            "error_message": error_message,
+        }
+    else:
+        error_message = "No ingredient to remove."
+        return {
+            "ingredients": ingredients,
+            "form": form,
+            "error_message": error_message,
         }
