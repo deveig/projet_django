@@ -4,7 +4,7 @@ Development of a cooking recipe web page.
 
 ## Project
 
-Install [Django](https://docs.djangoproject.com/en/4.2/intro/install/), version 4.2, Python 3.11.5.
+Install [Django](https://docs.djangoproject.com/en/4.2/intro/install/), version 4.2, Python 3.11.5. Create a virtual environment with [venv](https://docs.python.org/3/tutorial/venv.html).
 
 ## Database SQLite
 
