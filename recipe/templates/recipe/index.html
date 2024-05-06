@@ -5,9 +5,11 @@
         <meta charset="utf-8" /> {% load static %}
         <link rel="stylesheet" href="{% static 'recipe/css/normalize.css' %}" type="text/css" />
         <link rel="stylesheet" href="{% static 'recipe/css/style.css' %}" type="text/css" />
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;500;700&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Belgrano&family=Comfortaa:wght@300..700&display=swap"
+            rel="stylesheet"
+        />
         <script src="https://kit.fontawesome.com/025746aad5.js" crossorigin="anonymous"></script>
         <title>My cooking recipe</title>
     </head>
@@ -15,57 +17,73 @@
     <body>
         <header>
             <img class="picture" src="{% static 'recipe/images/salad.jpg' %}" alt="Salad" />
-            <h1 class="main-title">Salad</h1>
-            <p class="description"> Delicious flavored salad ! </p>
+            <div>
+                <h1 class="main-title">Salad</h1>
+                <p class="description">Delicious flavored salad !</p>
+            </div>
         </header>
         <main>
             <section>
                 <h2 class="subtitle">Overview</h2>
                 <dl class="features">
-                    <dt class="feature-picture">
-                        <div class="rate">
+                    <div>
+                        <dt class="feature-picture">
+                          <div class="rate">
                             <i class="fa-solid fa-star fa-2xs"></i>
                             <i class="fa-solid fa-star fa-2xs"></i>
                             <i class="fa-solid fa-star-half-stroke fa-2xs"></i>
                             <i class="fa-regular fa-star fa-2xs"></i>
                             <i class="fa-regular fa-star fa-2xs"></i>
-                        </div>
-                    </dt>
-                    <dd class="feature">Difficulty</dd>
-                    <dt class="feature-picture feature-picture-decoration"> 7€ </dt>
-                    <dd class="feature">Cost</dd>
-                    <dt class="feature-picture feature-picture-decoration"> 45min </dt>
-                    <dd class="feature">Preparation time</dd>
-                    <dt class="feature-picture feature-picture-decoration"> 0min </dt>
-                    <dd class="feature">Cooking time</dd>
-                    <dt class="feature-picture feature-picture-decoration"> 20min </dt>
-                    <dd class="feature">Resting time</dd>
+                          </div>
+                        </dt>
+                        <dd class="feature">Difficulty</dd>
+                    </div>
+                    <div>
+                        <dt class="feature-picture feature-picture-decoration">7€</dt>
+                        <dd class="feature">Cost</dd>
+                    </div>
+                    <div>
+                        <dt class="feature-picture feature-picture-decoration">45min</dt>
+                        <dd class="feature">Preparation time</dd>
+                    </div>
+                    <div>
+                        <dt class="feature-picture feature-picture-decoration">0min</dt>
+                        <dd class="feature">Cooking time</dd>
+                    </div>
+                    <div>
+                        <dt class="feature-picture feature-picture-decoration">20min</dt>
+                        <dd class="feature">Resting time</dd>
+                    </div>
                 </dl>
             </section>
             <section>
                 <h2 class="subtitle">Ingredients</h2>
-                <form method="post" action="{% url 'index' %}" novalidate> {% csrf_token %} <div class="item-handler">
-                        Servings: <button class="less-item" name="minus" value="minus">-</button>
-                        <span>{{ ingredients|length }}</span>
-                        <button class="more-item" name="plus" value="plus">+</button>
+                <form method="post" action="{% url 'index' %}" novalidate> 
+                    {% csrf_token %} 
+                    <div class="item-handler">
+                        <span>Servings: <span>{{ ingredients|length }}</span></span>
+                        <div>
+                            <button class="more-item" name="plus" value="plus">+</button>
+                            <button class="less-item" name="minus" value="minus">-</button>
+                        </div>
                     </div>
                     <table>
                         <caption class="table-legend">List of the recipe ingredients. Fill fields and click on plus
                             button to add ingredient to your recipe ! Click on minus button to remove it !</caption>
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>{{ form.name.label_tag }}</th>
-                                <th>{{ form.quantity.label_tag }}</th>
-                                <th>{{ form.metric.label_tag }}</th>
+                                <th class="item-datas item-number">N°</th>
+                                <th class="item-datas">{{ form.name.label_tag }}</th>
+                                <th class="item-datas">{{ form.quantity.label_tag }}</th>
+                                <th class="item-datas">{{ form.metric.label_tag }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td></td>
-                                <td>{{ form.name }}</td>
-                                <td>{{ form.quantity }}</td>
-                                <td>{{ form.metric }}</td>
+                                <td class="item-datas">{{ form.name }}</td>
+                                <td class="item-datas">{{ form.quantity }}</td>
+                                <td class="item-datas">{{ form.metric }}</td>
                             </tr>
                             <tr>
                                 <td></td>
@@ -74,10 +92,10 @@
                                 <td>{{ form.metric.errors }}</td> 
                             {% for ingredient in ingredients %}
                             <tr>
-                                <td>{{ forloop.counter }}</td>
-                                <td>{{ ingredient.ingredient }}</td>
-                                <td>{{ ingredient.quantity }}</td>
-                                <td>{{ ingredient.unit }}</td>
+                                <td class="item-datas item-number">{{ forloop.counter }}</td>
+                                <td class="item-datas">{{ ingredient.ingredient }}</td>
+                                <td class="item-datas">{{ ingredient.quantity }}</td>
+                                <td class="item-datas">{{ ingredient.unit }}</td>
                             </tr> 
                             {% endfor %}
                             {% if error_message %}
