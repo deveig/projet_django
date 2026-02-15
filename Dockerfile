@@ -9,4 +9,4 @@ RUN echo "SECRET_KEY=${SECRET_KEY}" > .env
 RUN python3 manage.py migrate
 RUN python3 manage.py makemigrations recipe
 RUN python3 manage.py migrate 
-CMD ["gunicorn", "django_project_wsgi", "--bind", "app"]
+CMD ["gunicorn", "django_project.wsgi", "--bind", "app"]
