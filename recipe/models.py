@@ -13,7 +13,7 @@ class Ingredient(models.Model):
         max_length=255,
         validators=[
             type(RegexValidator).__call__(
-                RegexValidator, "\d+", "Name is a word.", inverse_match=True
+                RegexValidator, "\\d+", "Name is a word.", inverse_match=True
             )
         ],
     )
@@ -22,13 +22,13 @@ class Ingredient(models.Model):
         validators=[
             type(RegexValidator).__call__(
                 RegexValidator,
-                "\D+",
+                "\\D+",
                 "Quantity is a positive number.",
                 inverse_match=True,
             ),
             type(RegexValidator).__call__(
                 RegexValidator,
-                "-\d+",
+                "-\\d+",
                 "Quantity is a positive number.",
                 inverse_match=True,
             ),
@@ -41,7 +41,7 @@ class Ingredient(models.Model):
         max_length=100,
         validators=[
             type(RegexValidator).__call__(
-                RegexValidator, "\d+", "Metric is a word.", inverse_match=True
+                RegexValidator, "\\d+", "Metric is a word.", inverse_match=True
             )
         ],
     )

@@ -8,7 +8,7 @@ class IngredientForm(forms.Form):
         max_length=25,
         validators=[
             type(RegexValidator).__call__(
-                RegexValidator, "\d+", "Name is a word.", inverse_match=True
+                RegexValidator, "\\d+", "Name is a word.", inverse_match=True
             )
         ],
     )
@@ -19,7 +19,7 @@ class IngredientForm(forms.Form):
         validators=[
             type(RegexValidator).__call__(
                 RegexValidator,
-                "\D+",
+                "\\D+",
                 "Quantity is a positive number.",
                 inverse_match=True,
             )
@@ -30,7 +30,7 @@ class IngredientForm(forms.Form):
         max_length=10,
         validators=[
             type(RegexValidator).__call__(
-                RegexValidator, "\d+", "Metric is a word.", inverse_match=True
+                RegexValidator, "\\d+", "Metric is a word.", inverse_match=True
             )
         ],
     )
