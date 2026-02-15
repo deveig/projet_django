@@ -65,7 +65,7 @@ class IngredientsRecipeTests(TestCase):
         client = Client()  # Arrange
         response = client.get("/recipe/")  # Act
         self.assertEqual(2, len(response.context["ingredients"]))  # Assert
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             response.context["ingredients"],
             [self.first_ingredient, self.second_ingredient],
             ordered=False,
