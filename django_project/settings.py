@@ -32,6 +32,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "app"]
 
+CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://172.0.0.1", "http://app"]
 
 # Application definition
 
@@ -129,3 +130,4 @@ STATIC_ROOT = "/usr/local/recipe/static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
