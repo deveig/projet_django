@@ -17,5 +17,5 @@ RUN echo "SECURE_HSTS_SECONDS = 3600" >> django_project/settings.py
 RUN echo "SECURE_HSTS_INCLUDE_SUBDOMAINS = True" >> django_project/settings.py
 RUN echo "SECURE_PROXY_SSL_HEADER = ('STRICT_TRANSPORT_SECURITY', 'max-age=31536000; includeSubDomains')" >> django_project/settings.py
 RUN echo "#SECURE_HSTS_PRELOAD = True" >> django_project/settings.py
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx.key -out /etc/ssl/certs/nginx.crt -subj "/CN=localhost"
-CMD ["gunicorn", "django_project.wsgi", "--bind", "app", "--keyfile", "/etc/ssl/private/nginx.key", "--certfile", "/etc/ssl/certs/nginx.crt"]
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/app.key -out /etc/ssl/certs/app.crt -subj "/CN=localhost"
+CMD ["gunicorn", "django_project.wsgi", "--bind", "app", "--keyfile", "/etc/ssl/private/app.key", "--certfile", "/etc/ssl/certs/app.crt"]
