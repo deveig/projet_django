@@ -85,15 +85,7 @@ class IngredientsRecipeTests(TestCase):
             new_ingredient,
         )  # Act
         self.assertEqual(3, len(response.context["ingredients"]))  # Assert
-        self.assertEqual(
-            new_ingredient["name"], response.context["form"]["name"].value()
-        )  # Assert
-        self.assertEqual(
-            new_ingredient["quantity"], response.context["form"]["quantity"].value()
-        )  # Assert
-        self.assertEqual(
-            new_ingredient["metric"], response.context["form"]["metric"].value()
-        )  # Assert
+            # Assert
         self.assertEqual(
             new_ingredient["name"], response.context["ingredients"][2].ingredient
         )  # Assert

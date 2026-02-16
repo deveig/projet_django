@@ -130,12 +130,3 @@ STATIC_ROOT = "/usr/local/recipe/static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# Security
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
-SECURE_HSTS_SECONDS = 3600
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_PROXY_SSL_HEADER = ("STRICT_TRANSPORT_SECURITY", "max-age=31536000; includeSubDomains")
-#SECURE_HSTS_PRELOAD = True
