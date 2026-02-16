@@ -1,7 +1,7 @@
 FROM python:3.14-rc-bookworm
 ARG SECRET_KEY
 ENV SECRET_KEY=$SECRET_KEY
-WORKDIR /usr/local/
+WORKDIR /usr/local/app/
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
