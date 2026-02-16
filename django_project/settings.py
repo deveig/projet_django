@@ -32,7 +32,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "app"]
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:8083", "http://127.0.0.1:8083"]
+#CSRF_TRUSTED_ORIGINS = ["http://localhost:8083", "http://127.0.0.1:8083"]
 
 # Application definition
 
@@ -131,3 +131,11 @@ STATIC_ROOT = "/usr/local/recipe/static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Security
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 3600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_PROXY_SSL_HEADER = ("STRICT_TRANSPORT_SECURITY", "max-age=31536000; includeSubDomains")
+#SECURE_HSTS_PRELOAD = True
