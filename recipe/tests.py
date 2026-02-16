@@ -63,7 +63,7 @@ class IngredientsRecipeTests(TestCase):
     def test_get_all_ingredients_to_view(self):
         """Get all ingredients in DOM."""
         client = Client()  # Arrange
-        response = client.get("/")  # Act
+        response = client.get("/recipe-django/")  # Act
         self.assertEqual(2, len(response.context["ingredients"]))  # Assert
         self.assertQuerySetEqual(
             response.context["ingredients"],
@@ -81,7 +81,7 @@ class IngredientsRecipeTests(TestCase):
             "metric": "piece",
         }  # Arrange
         response = client.post(
-            "/",
+            "/recipe-django/",
             new_ingredient,
         )  # Act
         self.assertEqual(3, len(response.context["ingredients"]))  # Assert
@@ -100,7 +100,7 @@ class IngredientsRecipeTests(TestCase):
         """Add an invalid ingredient in DOM."""
         client = Client()  # Arrange
         response = client.post(
-            "/",
+            "/recipe-django/",
             {"plus": "plus", "name": "onion1", "quantity": "1", "metric": "piece"},
         )  # Act
         self.assertEqual(2, len(response.context["ingredients"]))  # Assert
@@ -112,7 +112,7 @@ class IngredientsRecipeTests(TestCase):
         """Delete the last ingredient in DOM."""
         client = Client()  # Arrange
         response = client.post(
-            "/",
+            "/recipe-django/",
             {"minus": "minus", "name": "", "quantity": "", "metric": ""},
         )  # Act
         self.assertEqual(1, len(response.context["ingredients"]))  # Assert
@@ -126,7 +126,7 @@ class IngredientsRecipeTests(TestCase):
         client = Client()  # Arrange
         for i in range(3):
             response = client.post(
-                "/",
+                "/recipe-django/",
                 {"minus": "minus", "name": "", "quantity": "", "metric": ""},
             )  # Act
         self.assertEqual(0, len(response.context["ingredients"]))  # Assert
