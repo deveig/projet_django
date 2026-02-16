@@ -38,6 +38,7 @@ def save(request):
             form.cleaned_data["metric"],
         )  # Create and save ingredient.
         ingredients = Ingredient.objects.all()
+        form = IngredientForm()  # Clear form.
         return {
             "ingredients": ingredients,
             "form": form,
