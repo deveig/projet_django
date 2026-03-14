@@ -88,6 +88,13 @@ form {
 	padding: 0% 10%;
 }
 
+.form-title {
+	margin: 10% 0%;
+	padding: 0% 0%;
+	font-family: Comfortaa, sans-serif;
+	font-size: 12px;
+}
+
 .item-handler {
 	display: flex;
 	flex-direction: row;

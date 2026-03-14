@@ -11,7 +11,6 @@
         <link href="https://fonts.googleapis.com/css2?family=Belgrano&family=Comfortaa:wght@300..700&display=swap"
             rel="stylesheet"
         />
-        <link rel="shortcut icon" href="{% static 'recipe/favicon.ico' %}" type="image/x-icon">
         <script src="https://kit.fontawesome.com/025746aad5.js" crossorigin="anonymous"></script>
         <title>My cooking recipe</title>
     </head>
@@ -20,7 +19,38 @@
         <header>
             <img class="picture" src="{% static 'recipe/images/salad.jpg' %}" alt="Salad" />
             <div>
-                <h1 class="main-title">Salad</h1>
+                <h1 class="main-title">Salad of
+                    {% if username is None %}
+                        <form method="post" action="{% url 'index' %}" class="form-title" novalidate> 
+                            {% csrf_token %} 
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="item-datas">
+                                                <label for="user_name">{{ user_form.user_name.label_tag }}</label>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="item-datas">
+                                                <input id="user_name" name="user_name">
+                                            </td>
+                                            <td>
+                                                <button class="more-item" name="plus_name" value="plus_name">+</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                        </form>
+                    {% else %}
+                        {{ username }}
+                    {% endif %}
+                </h1>
+                <span>{{ user_form.user_name.errors }}</span>
+                {% if user_error %}
+                    <span class="warning">{{ user_error }}</span>
+                {% endif %}
                 <p class="description">Delicious flavored salad !</p>
             </div>
         </header>
@@ -63,7 +93,7 @@
                 <form method="post" action="{% url 'index' %}" novalidate> 
                     {% csrf_token %} 
                     <div class="item-handler">
-                        <span>Servings: <span>{{ ingredients|length }}</span></span>
+                        <span>Servings: {% if username is not None %}<span>{{ ingredients|length }}</span>{% endif %}</span>
                         <div>
                             <button class="more-item" name="plus" value="plus">+</button>
                             <button class="less-item" name="minus" value="minus">-</button>
@@ -75,36 +105,39 @@
                         <thead>
                             <tr>
                                 <th class="item-datas item-number">N°</th>
-                                <th class="item-datas">{{ form.name.label_tag }}</th>
-                                <th class="item-datas">{{ form.quantity.label_tag }}</th>
-                                <th class="item-datas">{{ form.metric.label_tag }}</th>
+                                <th class="item-datas">{{ ingredient_form.name.label_tag }}</th>
+                                <th class="item-datas">{{ ingredient_form.quantity.label_tag }}</th>
+                                <th class="item-datas">{{ ingredient_form.metric.label_tag }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td></td>
-                                <td class="item-datas">{{ form.name }}</td>
-                                <td class="item-datas">{{ form.quantity }}</td>
-                                <td class="item-datas">{{ form.metric }}</td>
+                                <td class="item-datas">{{ ingredient_form.name }}</td>
+                                <td class="item-datas">{{ ingredient_form.quantity }}</td>
+                                <td class="item-datas">{{ ingredient_form.metric }}</td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td>{{ form.name.errors }}</td>
-                                <td>{{ form.quantity.errors }}</td>
-                                <td>{{ form.metric.errors }}</td> 
-                            {% for ingredient in ingredients %}
-                            <tr>
-                                <td class="item-datas item-number">{{ forloop.counter }}</td>
-                                <td class="item-datas">{{ ingredient.ingredient }}</td>
-                                <td class="item-datas">{{ ingredient.quantity }}</td>
-                                <td class="item-datas">{{ ingredient.unit }}</td>
-                            </tr> 
-                            {% endfor %}
-                            {% if error_message %}
-                            <tr>
-                                <td colspan="4" class="warning">{{ error_message }}</td>
+                                <td>{{ ingredient_form.name.errors }}</td>
+                                <td>{{ ingredient_form.quantity.errors }}</td>
+                                <td>{{ ingredient_form.metric.errors }}</td> 
                             </tr>
-                            {% endif %}
+                            {% if username is not None %}
+                                {% for ingredient in ingredients %}
+                                <tr>
+                                    <td class="item-datas item-number">{{ forloop.counter }}</td>
+                                    <td class="item-datas">{{ ingredient.ingredient }}</td>
+                                    <td class="item-datas">{{ ingredient.quantity }}</td>
+                                    <td class="item-datas">{{ ingredient.unit }}</td>
+                                </tr> 
+                                {% endfor %}
+                                {% endif %}
+                                {% if ingredient_error %}
+                                <tr>
+                                    <td colspan="4" class="warning">{{ ingredient_error }}</td>
+                                </tr>
+                                {% endif %}
                         </tbody>
                     </table>
                 </form>

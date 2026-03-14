@@ -1,6 +1,16 @@
 from django import forms
 from django.core.validators import RegexValidator
 
+class UserForm(forms.Form):
+    user_name = forms.CharField(
+        label="Your name",
+        max_length=25,
+        validators=[
+            type(RegexValidator).__call__(
+                RegexValidator, r"\d+", "Enter your name !", inverse_match=True
+            )
+        ],
+    )
 
 class IngredientForm(forms.Form):
     name = forms.CharField(
