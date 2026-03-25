@@ -32,7 +32,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "app"]
 
-CSRF_TRUSTED_ORIGINS = ["https://localhost:8090", "https://127.0.0.1:8090", "https://localhost"]
+CSRF_TRUSTED_ORIGINS = ["https://localhost:8090", "https://127.0.0.1:8090", "https://localhost", "https://www.deveigportfoliocm.fr"]
 
 # Application definition
 
