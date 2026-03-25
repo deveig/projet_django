@@ -19,7 +19,7 @@
         <header>
             <img class="picture" src="{% static 'recipe/images/salad.jpg' %}" alt="Salad" />
             <div>
-                <h1 class="main-title">Salad of
+                <h1 class="main-title">
                     {% if username is None %}
                         <form method="post" action="{% url 'index' %}" class="form-title" novalidate> 
                             {% csrf_token %} 
@@ -46,6 +46,7 @@
                     {% else %}
                         {{ username }}
                     {% endif %}
+                    's salad
                 </h1>
                 <span>{{ user_form.user_name.errors }}</span>
                 {% if user_error %}
