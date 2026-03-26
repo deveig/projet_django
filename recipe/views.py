@@ -55,7 +55,7 @@ def save_ingredient(request, user_id, username, user_form):
                 user,
             )  # Create and save ingredient.
             ingredients = Ingredient.objects.filter(user__exact=user)
-            form = IngredientForm()  # Clear form.
+            ingredient_form = IngredientForm()  # Clear form.
             return {"username": username, "ingredients": ingredients, "user_form": user_form, "ingredient_form": ingredient_form}
         else:
             ingredients = Ingredient.objects.filter(user__exact=user)
